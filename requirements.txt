@@ -10,3 +10,4 @@ langchain
 langchain-groq
 groq
 python-dotenv
+plotly
