@@ -1,6 +1,6 @@
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
-from langchain.chains import LLMChain
+from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -39,13 +39,14 @@ def chatbot(info, history, message, language="English"):
         input_variables=['info', 'history', 'message', 'language_instruction']
     )
 
-    chain = LLMChain(llm=llm, prompt=PROMPT)
+    output_parser = StrOutputParser()
+    chain = PROMPT | llm | output_parser
     
-    response = chain.predict(
-        info=info, 
-        history=history, 
-        message=message,
-        language_instruction=language_instruction
-    )
+    response = chain.invoke({
+        "info": info, 
+        "history": history, 
+        "message": message,
+        "language_instruction": language_instruction
+    })
     
     return response
